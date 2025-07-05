@@ -1,0 +1,29 @@
+package eventmanagement.kernel.core.domain.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.Set;
+
+/**
+ * Business object for events.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EventBO {
+
+    private Long id;
+    private String title;
+    private String location;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
+    private String description;
+    private EventType type;
+    private Set<UserBO> participants;
+
+}
