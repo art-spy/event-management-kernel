@@ -4,6 +4,7 @@ import eventmanagement.kernel.core.domain.error.OverlappingEventException;
 import eventmanagement.kernel.core.domain.model.EventBO;
 import eventmanagement.kernel.core.domain.model.EventType;
 import eventmanagement.kernel.core.domain.model.UserBO;
+import eventmanagement.kernel.core.persistance.EventEntity;
 import eventmanagement.kernel.core.persistance.UserEntity;
 import eventmanagement.kernel.core.persistance.mapper.EntityBoMapper;
 import eventmanagement.kernel.core.persistance.repository.EventJpaRepository;
@@ -15,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.bind.ValidationException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,10 +33,17 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventBO> findAll() {
-        return eventJpaRepository.findAll().stream()
-                .map(entityBoMapper::toBO)
-                .sorted((a,b) -> a.getStartDateTime().compareTo(b.getStartDateTime()))
-                .collect(Collectors.toList());
+        List<EventEntity> eventEntities = eventJpaRepository.findAll();
+        List<EventBO> eventBOList = new ArrayList<>();
+
+        for (EventEntity eventEntity : eventEntities) {
+            EventBO eventBO = entityBoMapper.toBO(eventEntity);
+            eventBOList.add(eventBO);
+        }
+
+        Collections.sort(eventBOList, Comparator.comparing(EventBO::getStartDate));
+
+        return eventBOList;
     }
 
     @Override
@@ -76,8 +87,8 @@ public class EventServiceImpl implements EventService {
 
     /** Dauer-Regeln prüfen */
     private void validateDuration(EventBO event) throws ValidationException {
-        var duration = Duration.between(event.getStartDateTime(), event.getEndDateTime());
-        if (event.getStartDateTime().isAfter(event.getEndDateTime())) {
+        var duration = Duration.between(event.getStartDate(), event.getEndDate());
+        if (event.getStartDate().isAfter(event.getEndDate())) {
             throw new ValidationException("Enddatum vor Startdatum.");
         }
         boolean max24h = duration.toHours() > 24;
@@ -106,7 +117,7 @@ public class EventServiceImpl implements EventService {
     private void checkOverlap(EventBO event) {
         for (UserBO user : event.getParticipants()) {
             var overlaps = eventJpaRepository.findEventOverlapping(
-                    user.getId(), event.getStartDateTime(), event.getEndDateTime()
+                    user.getId(), event.getStartDate(), event.getEndDate()
             );
             boolean conflict = overlaps.stream()
                     .anyMatch(x -> !x.getId().equals(event.getId()));

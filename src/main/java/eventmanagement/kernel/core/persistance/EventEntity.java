@@ -18,6 +18,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,7 +59,7 @@ public class EventEntity {
     @JoinTable(
             name = "event_participants",
             joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "participant_id")
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<UserEntity> participants;
 

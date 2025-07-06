@@ -1,5 +1,6 @@
 package eventmanagement.kernel.core.rest;
 
+import eventmanagement.kernel.core.domain.model.EventBO;
 import eventmanagement.kernel.core.domain.service.EventService;
 import eventmanagement.kernel.core.rest.mapper.BoDtoMapper;
 import eventmanagement.kernel.core.rest.model.EventDto;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.bind.ValidationException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * CRUD endpoints for /api/events
@@ -31,9 +32,15 @@ public class EventController {
 
     @GetMapping
     public List<EventDto> getAll() {
-        return eventService.findAll().stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
+        List<EventBO> eventBOList = eventService.findAll();
+        List<EventDto> eventDTOList = new ArrayList<>();
+
+        for (EventBO eventBO : eventBOList) {
+            EventDto eventDTO = mapper.toDto(eventBO);
+            eventDTOList.add(eventDTO);
+        }
+
+        return eventDTOList;
     }
 
     @GetMapping("/{id}")

@@ -10,17 +10,17 @@ VALUES ('JavaScript Meetup', 'Großer Konfi',
         '2024-08-01 17:00:00', '2024-08-01 20:00:00',
         'Meetup für JavaScript-Enthusiasten.', 'MEETUP');
 
--- conference (several Tage)
+-- conference (several dayx)
 INSERT INTO EVENTS.EVENTS (title, location, start_date, end_date, description, type)
 VALUES ('Java Konferenz', 'Messehallen Hamburg',
         '2024-09-15 09:00:00', '2024-09-17 18:00:00',
-        'Dreitägige Konferenz mit internationalen Rednern.', 'KONFERENZ');
+        'Dreitägige Konferenz mit internationalen Rednern.', 'CONFERENCE');
 
--- festivity (mehrere Tage)
+-- festivity (several days)
 INSERT INTO EVENTS.EVENTS (title, location, start_date, end_date, description, type)
 VALUES ('Sommerfest', 'Garten C',
         '2024-07-20 12:00:00', '2024-07-21 22:00:00',
-        'Sommerfest für alle Mitarbeitenden.', 'FEST');
+        'Sommerfest für alle Mitarbeitenden.', 'FESTIVITY');
 
 -- users
 INSERT INTO EVENTS.USERS (email, first_name, last_name)
@@ -59,15 +59,6 @@ VALUES (1, 5);
 
 INSERT INTO EVENTS.EVENT_PARTICIPANTS (EVENT_ID, USER_ID)
 VALUES (1, 6);
-
-INSERT INTO EVENTS.EVENT_PARTICIPANTS (EVENT_ID, USER_ID)
-VALUES (1, 1);
-
-INSERT INTO EVENTS.EVENT_PARTICIPANTS (EVENT_ID, USER_ID)
-VALUES (1, 2);
-
-INSERT INTO EVENTS.EVENT_PARTICIPANTS (EVENT_ID, USER_ID)
-VALUES (1, 3);
 
 INSERT INTO EVENTS.EVENT_PARTICIPANTS (EVENT_ID, USER_ID)
 VALUES (2, 4);
