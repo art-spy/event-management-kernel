@@ -29,37 +29,34 @@ public class UserController {
     private final BoDtoMapper mapper;
 
     @GetMapping
-    public List<UserDto> getAll() {
-        return userService.findAll().stream()
+    public List<UserDto> getAllUsers() {
+        return userService.findAllUsers().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(mapper.toDto(userService.findById(id)));
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toDto(userService.findUserById(id)));
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody UserDto dto) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto dto) {
         return ResponseEntity.ok(
-                mapper.toDto(userService.create(mapper.toBo(dto)))
+                mapper.toDto(userService.createUser(mapper.toBo(dto)))
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> update(
-            @PathVariable Long id,
-            @RequestBody UserDto dto
-    ) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto dto) {
         return ResponseEntity.ok(
-                mapper.toDto(userService.update(id, mapper.toBo(dto)))
+                mapper.toDto(userService.updateUser(id, mapper.toBo(dto)))
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userService.delete(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 }

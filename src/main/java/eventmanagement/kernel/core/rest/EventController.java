@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.bind.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +30,8 @@ public class EventController {
     private final BoDtoMapper mapper;
 
     @GetMapping
-    public List<EventDto> getAll() {
-        List<EventBO> eventBOList = eventService.findAll();
+    public List<EventDto> getAllEvents() {
+        List<EventBO> eventBOList = eventService.findAllEvents();
         List<EventDto> eventDTOList = new ArrayList<>();
 
         for (EventBO eventBO : eventBOList) {
@@ -44,30 +43,27 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventDto> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(mapper.toDto(eventService.findById(id)));
+    public ResponseEntity<EventDto> getEventById(@PathVariable Long id) {
+        return ResponseEntity.ok(mapper.toDto(eventService.findEventById(id)));
     }
 
     @PostMapping
-    public ResponseEntity<EventDto> create(@RequestBody EventDto dto) throws ValidationException {
+    public ResponseEntity<EventDto> createEvent(@RequestBody EventDto dto) {
         return ResponseEntity.ok(
-                mapper.toDto(eventService.create(mapper.toBo(dto)))
+                mapper.toDto(eventService.createEvent(mapper.toBo(dto)))
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventDto> update(
-            @PathVariable Long id,
-            @RequestBody EventDto dto
-    ) throws ValidationException {
+    public ResponseEntity<EventDto> updateEvent(@PathVariable Long id, @RequestBody EventDto dto) {
         return ResponseEntity.ok(
-                mapper.toDto(eventService.update(id, mapper.toBo(dto)))
+                mapper.toDto(eventService.updateEvent(id, mapper.toBo(dto)))
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        eventService.delete(id);
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+        eventService.deleteEvent(id);
         return ResponseEntity.noContent().build();
     }
 

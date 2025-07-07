@@ -20,8 +20,8 @@ public class EventBO {
     private Long id;
     private String title;
     private String location;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String description;
     private EventType type;
     private Set<UserBO> participants;

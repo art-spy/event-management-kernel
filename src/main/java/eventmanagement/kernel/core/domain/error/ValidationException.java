@@ -1,16 +1,17 @@
 package eventmanagement.kernel.core.domain.error;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-/**
- * HTTP status 400 – validation error
- * */
+@Getter
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class ValidationException extends RuntimeException {
 
-    public ValidationException(String msg) {
-        super(msg);
-    }
+    private final ErrorType errorType;
 
+    public ValidationException(String msg, ErrorType errorType) {
+        super(msg);
+        this.errorType = errorType;
+    }
 }

@@ -1,6 +1,10 @@
 package eventmanagement.kernel.core.domain.service;
 
+import eventmanagement.kernel.core.domain.error.ErrorType;
+import eventmanagement.kernel.core.domain.error.EventNotFoundException;
 import eventmanagement.kernel.core.domain.error.OverlappingEventException;
+import eventmanagement.kernel.core.domain.error.UserNotFoundException;
+import eventmanagement.kernel.core.domain.error.ValidationException;
 import eventmanagement.kernel.core.domain.model.EventBO;
 import eventmanagement.kernel.core.domain.model.EventType;
 import eventmanagement.kernel.core.domain.model.UserBO;
@@ -9,19 +13,17 @@ import eventmanagement.kernel.core.persistance.UserEntity;
 import eventmanagement.kernel.core.persistance.mapper.EntityBoMapper;
 import eventmanagement.kernel.core.persistance.repository.EventJpaRepository;
 import eventmanagement.kernel.core.persistance.repository.UserJpaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.bind.ValidationException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class EventServiceImpl implements EventService {
     private final EntityBoMapper entityBoMapper;
 
     @Override
-    public List<EventBO> findAll() {
+    public List<EventBO> findAllEvents() {
         List<EventEntity> eventEntities = eventJpaRepository.findAll();
         List<EventBO> eventBOList = new ArrayList<>();
 
@@ -47,17 +49,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventBO findById(Long id) {
+    public EventBO findEventById(Long id) throws EventNotFoundException {
         return eventJpaRepository.findById(id)
                 .map(entityBoMapper::toBO)
-                .orElseThrow(() -> new EntityNotFoundException("Event nicht gefunden: " + id));
+                .orElseThrow(() -> new EventNotFoundException("Event nicht gefunden: " + id, ErrorType.EVENT_NOT_FOUND));
     }
 
     @Override
     @Transactional
-    public EventBO create(EventBO event) throws ValidationException {
-        validateDuration(event);
-        var participants = fetchAndValidateParticipants(event.getParticipants());
+    public EventBO createEvent(EventBO event) throws ValidationException {
+        validateEventDuration(event);
+        var participants = retrieveParticipants(event.getParticipants());
         event.setParticipants(participants);
         checkOverlap(event);
         return entityBoMapper.toBO(eventJpaRepository.save(entityBoMapper.toEntity(event)));
@@ -65,55 +67,61 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventBO update(Long id, EventBO event) throws ValidationException {
+    public EventBO updateEvent(Long id, EventBO event) throws EventNotFoundException {
         if (!eventJpaRepository.existsById(id)) {
-            throw new EntityNotFoundException("Event nicht gefunden: " + id);
+            throw new EventNotFoundException("Event nicht gefunden: " + id, ErrorType.EVENT_NOT_FOUND);
         }
         event.setId(id);
-        validateDuration(event);
-        var participants = fetchAndValidateParticipants(event.getParticipants());
+        validateEventDuration(event);
+        var participants = retrieveParticipants(event.getParticipants());
         event.setParticipants(participants);
         checkOverlap(event);
         return entityBoMapper.toBO(eventJpaRepository.save(entityBoMapper.toEntity(event)));
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteEvent(Long id) throws EventNotFoundException {
         if (!eventJpaRepository.existsById(id)) {
-            throw new EntityNotFoundException("Event nicht gefunden: " + id);
+            throw new EventNotFoundException("Event nicht gefunden: " + id, ErrorType.EVENT_NOT_FOUND);
         }
         eventJpaRepository.deleteById(id);
     }
 
-    /** Dauer-Regeln prüfen */
-    private void validateDuration(EventBO event) throws ValidationException {
+    /**
+     * Dauer-Regeln prüfen
+     */
+    private void validateEventDuration(EventBO event) throws ValidationException {
         var duration = Duration.between(event.getStartDate(), event.getEndDate());
         if (event.getStartDate().isAfter(event.getEndDate())) {
-            throw new ValidationException("Enddatum vor Startdatum.");
+            throw new ValidationException("Enddatum vor Startdatum.", ErrorType.START_DATE_AFTER_END_DATE);
         }
         boolean max24h = duration.toHours() > 24;
         if ((event.getType() == EventType.AFTERWORK
                 || event.getType() == EventType.FESTIVITY)
                 && duration.toHours() > 24) {
-            throw new ValidationException("Afterwork/Fest darf max. 24 h dauern.");
+            throw new ValidationException("Afterwork/Fest darf max. 24 h dauern.", ErrorType.EVENT_DURATION_EXCEEDED);
         }
     }
 
-    /** Teilnehmer laden */
-    private Set<UserBO> fetchAndValidateParticipants(Set<UserBO> bos) {
-        return bos.stream().map(uBO -> {
-            UserEntity entity = null;
-            try {
-                entity = userJpaRepository.findById(uBO.getId())
-                        .orElseThrow(() -> new ValidationException("Teilnehmer nicht gefunden: " + uBO.getId()));
-            } catch (ValidationException e) {
-                throw new RuntimeException(e);
-            }
-            return entityBoMapper.toBO(entity);
-        }).collect(Collectors.toSet());
+    /**
+     * Teilnehmer laden
+     */
+    private Set<UserBO> retrieveParticipants(Set<UserBO> users) {
+        Set<UserBO> result = new HashSet<>();
+        
+        for (UserBO user : users) {
+            UserEntity entity = userJpaRepository.findById(user.getId())
+                    .orElseThrow(() -> 
+                            new UserNotFoundException("Teilnehmer nicht gefunden: " + user.getId(), ErrorType.USER_NOT_FOUND));
+            result.add(entityBoMapper.toBO(entity));
+        }
+        
+        return result;
     }
 
-    /** Überschneidungen prüfen */
+    /**
+     * Überschneidungen prüfen
+     */
     private void checkOverlap(EventBO event) {
         for (UserBO user : event.getParticipants()) {
             var overlaps = eventJpaRepository.findEventOverlapping(
@@ -123,7 +131,8 @@ public class EventServiceImpl implements EventService {
                     .anyMatch(x -> !x.getId().equals(event.getId()));
             if (conflict) {
                 throw new OverlappingEventException(
-                        "Benutzer " + user.getEmail() + " hat zeitlich überlappendes Event."
+                        "Benutzer " + user.getEmail() + " hat zeitlich überlappendes Event.",
+                        ErrorType.DATE_OVERLAPPING_USER
                 );
             }
         }

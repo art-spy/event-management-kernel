@@ -1,16 +1,16 @@
 package eventmanagement.kernel.core.domain.service;
 
+import eventmanagement.kernel.core.domain.error.EventNotFoundException;
 import eventmanagement.kernel.core.domain.model.EventBO;
 
-import javax.xml.bind.ValidationException;
 import java.util.List;
 
 public interface EventService {
 
-    List<EventBO> findAll();
-    EventBO findById(Long id);
-    EventBO create(EventBO event) throws ValidationException;
-    EventBO update(Long id, EventBO event) throws ValidationException;
-    void delete(Long id);
+    List<EventBO> findAllEvents();
+    EventBO findEventById(Long id) throws EventNotFoundException;
+    EventBO createEvent(EventBO event) throws eventmanagement.kernel.core.domain.error.ValidationException;
+    EventBO updateEvent(Long id, EventBO event) throws EventNotFoundException;
+    void deleteEvent(Long id) throws EventNotFoundException;
 
 }

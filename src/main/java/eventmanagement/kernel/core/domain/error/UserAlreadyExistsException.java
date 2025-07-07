@@ -5,15 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * HTTP status 409 – Event overlapping
+ * HTTP status 404 – Entity not found
  */
 @Getter
-@ResponseStatus(HttpStatus.CONFLICT)
-public class OverlappingEventException extends RuntimeException {
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class UserAlreadyExistsException extends RuntimeException {
 
     private final ErrorType errorType;
 
-    public OverlappingEventException(String msg, ErrorType errorType) {
+    public UserAlreadyExistsException(String msg, ErrorType errorType) {
         super(msg);
         this.errorType = errorType;
     }

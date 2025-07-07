@@ -1,13 +1,14 @@
 package eventmanagement.kernel.core.domain.service;
 
+import eventmanagement.kernel.core.domain.error.ErrorType;
+import eventmanagement.kernel.core.domain.error.UserAlreadyExistsException;
+import eventmanagement.kernel.core.domain.error.UserNotFoundException;
 import eventmanagement.kernel.core.domain.model.UserBO;
 import eventmanagement.kernel.core.persistance.mapper.EntityBoMapper;
 import eventmanagement.kernel.core.persistance.repository.UserJpaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,45 +20,37 @@ public class UserServiceImpl implements UserService {
     private final EntityBoMapper mapper;
 
     @Override
-    public List<UserBO> findAll() {
+    public List<UserBO> findAllUsers() {
         return userJpaRepository.findAll().stream()
                 .map(mapper::toBO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public UserBO findById(Long id) {
+    public UserBO findUserById(Long id) {
         return userJpaRepository.findById(id)
                 .map(mapper::toBO)
-                .orElseThrow(() -> new EntityNotFoundException("User nicht gefunden: " + id));
+                .orElseThrow(() -> new UserNotFoundException("User nicht gefunden: " + id, ErrorType.USER_NOT_FOUND));
     }
 
     @Override
-    public UserBO create(UserBO user) {
+    public UserBO createUser(UserBO user) {
         userJpaRepository.findByEmail(user.getEmail())
-                .ifPresent(u -> {
-                    try {
-                        throw new ValidationException("E-Mail bereits vergeben.");
-                    } catch (ValidationException e) {
-                        throw new RuntimeException(e);
-                    }
+                .ifPresent(userEntity -> {
+                    throw new UserAlreadyExistsException("E-Mail bereits vergeben.", ErrorType.USER_ALREADY_EXISTS );
                 });
         return mapper.toBO(userJpaRepository.save(mapper.toEntity(user)));
     }
 
     @Override
-    public UserBO update(Long id, UserBO user) {
+    public UserBO updateUser(Long id, UserBO user) {
         var existing = userJpaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User nicht gefunden: " + id));
+                .orElseThrow(() -> new UserNotFoundException("User nicht gefunden: " + id, ErrorType.USER_NOT_FOUND));
         // validate eMail change
         if (!existing.getEmail().equals(user.getEmail())) {
             userJpaRepository.findByEmail(user.getEmail())
-                    .ifPresent(u -> {
-                        try {
-                            throw new ValidationException("E-Mail bereits vergeben.");
-                        } catch (ValidationException e) {
-                            throw new RuntimeException(e);
-                        }
+                    .ifPresent(userEntity -> {
+                        throw new UserAlreadyExistsException("E-Mail bereits vergeben.", ErrorType.USER_ALREADY_EXISTS);
                     });
         }
         user.setId(id);
@@ -65,9 +58,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         if (!userJpaRepository.existsById(id)) {
-            throw new EntityNotFoundException("User nicht gefunden: " + id);
+            throw new UserNotFoundException("User nicht gefunden: " + id, ErrorType.USER_NOT_FOUND);
         }
         userJpaRepository.deleteById(id);
     }
