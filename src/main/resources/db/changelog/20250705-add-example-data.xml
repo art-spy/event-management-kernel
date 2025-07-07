@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="20250705-insert-example-data" author="dev">
+        <!-- Events -->
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title">Afterwork Treffen</column>
+            <column name="location">Terrasse</column>
+            <column name="start_date">2024-07-10 18:00:00</column>
+            <column name="end_date">2024-07-10 21:00:00</column>
+            <column name="description">Gemütlicher Ausklang.</column>
+            <column name="type">AFTERWORK</column>
+        </insert>
+
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title">JavaScript Meetup</column>
+            <column name="location">Großer Konfi</column>
+            <column name="start_date">2024-08-01 17:00:00</column>
+            <column name="end_date">2024-08-01 20:00:00</column>
+            <column name="description">Meetup für JavaScript-Enthusiasten.</column>
+            <column name="type">MEETUP</column>
+        </insert>
+
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title">Java Konferenz</column>
+            <column name="location">Messehallen Hamburg</column>
+            <column name="start_date">2024-09-15 09:00:00</column>
+            <column name="end_date">2024-09-17 18:00:00</column>
+            <column name="description">Dreitägige Konferenz mit internationalen Rednern.</column>
+            <column name="type">CONFERENCE</column>
+        </insert>
+
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title">Sommerfest</column>
+            <column name="location">Garten C</column>
+            <column name="start_date">2024-07-20 12:00:00</column>
+            <column name="end_date">2024-07-21 22:00:00</column>
+            <column name="description">Sommerfest für alle Mitarbeitenden.</column>
+            <column name="type">FESTIVITY</column>
+        </insert>
+
+        <!-- Users -->
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email">max.mustermann@datadrivers.de</column>
+            <column name="first_name">Max</column>
+            <column name="last_name">Mustermann</column>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email">erika.gabler@datadrivers.de</column>
+            <column name="first_name">Erika</column>
+            <column name="last_name">Gabler</column>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email">Paul.Panzer@datadrivers.de</column>
+            <column name="first_name">Paul</column>
+            <column name="last_name">Panzer</column>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email">homer.simpson@datadrivers.de</column>
+            <column name="first_name">Homer</column>
+            <column name="last_name">Simpson</column>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email">willy.wellensittich@datadrivers.de</column>
+            <column name="first_name">Willie</column>
+            <column name="last_name">Wellensittich</column>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email">ursula.spatz@datadrivers.de</column>
+            <column name="first_name">Ursula</column>
+            <column name="last_name">Spatz</column>
+        </insert>
+
+        <!-- Event Participants -->
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">1</column>
+            <column name="user_id">1</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">1</column>
+            <column name="user_id">2</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">1</column>
+            <column name="user_id">3</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">1</column>
+            <column name="user_id">4</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">1</column>
+            <column name="user_id">5</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">1</column>
+            <column name="user_id">6</column>
+        </insert>
+
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">2</column>
+            <column name="user_id">4</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">2</column>
+            <column name="user_id">5</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">2</column>
+            <column name="user_id">6</column>
+        </insert>
+
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">3</column>
+            <column name="user_id">1</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">3</column>
+            <column name="user_id">3</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">3</column>
+            <column name="user_id">5</column>
+        </insert>
+
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">4</column>
+            <column name="user_id">2</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">4</column>
+            <column name="user_id">4</column>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id">4</column>
+            <column name="user_id">6</column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

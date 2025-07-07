@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="20250705-01-create-schema" author="dev">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM SYSCAT.SCHEMATA WHERE SCHEMANAME = 'EVENTS'
+            </sqlCheck>
+        </preConditions>
+        <sql>CREATE SCHEMA EVENTS</sql>
+    </changeSet>
+
+    <changeSet id="20250705-02-create-tables" author="dev">
+        <createTable tableName="USERS" schemaName="EVENTS">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="EVENTS" schemaName="EVENTS">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="location" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(1000)"/>
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="EVENT_PARTICIPANTS"
+                       columnNames="event_id, user_id"
+                       schemaName="EVENTS"/>
+
+        <addForeignKeyConstraint baseTableName="EVENT_PARTICIPANTS"
+                                 baseColumnNames="event_id"
+                                 constraintName="fk_event_participants_event"
+                                 referencedTableName="EVENTS"
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="EVENTS"
+                                 referencedTableSchemaName="EVENTS"/>
+
+        <addForeignKeyConstraint baseTableName="EVENT_PARTICIPANTS"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_event_participants_user"
+                                 referencedTableName="USERS"
+                                 referencedColumnNames="id"
+                                 baseTableSchemaName="EVENTS"
+                                 referencedTableSchemaName="EVENTS"/>
+    </changeSet>
+
+    <changeSet id="20250705-03-insert-data" author="dev">
+        <!-- Events -->
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title" value="Afterwork Treffen"/>
+            <column name="location" value="Terrasse"/>
+            <column name="start_date" value="2024-07-10 18:00:00"/>
+            <column name="end_date" value="2024-07-10 21:00:00"/>
+            <column name="description" value="Gemütlicher Ausklang."/>
+            <column name="type" value="AFTERWORK"/>
+        </insert>
+
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title" value="JavaScript Meetup"/>
+            <column name="location" value="Großer Konfi"/>
+            <column name="start_date" value="2024-08-01 17:00:00"/>
+            <column name="end_date" value="2024-08-01 20:00:00"/>
+            <column name="description" value="Meetup für JavaScript-Enthusiasten."/>
+            <column name="type" value="MEETUP"/>
+        </insert>
+
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title" value="Java Konferenz"/>
+            <column name="location" value="Messehallen Hamburg"/>
+            <column name="start_date" value="2024-09-15 09:00:00"/>
+            <column name="end_date" value="2024-09-17 18:00:00"/>
+            <column name="description" value="Dreitägige Konferenz mit internationalen Rednern."/>
+            <column name="type" value="CONFERENCE"/>
+        </insert>
+
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title" value="Sommerfest"/>
+            <column name="location" value="Garten C"/>
+            <column name="start_date" value="2024-07-20 12:00:00"/>
+            <column name="end_date" value="2024-07-21 22:00:00"/>
+            <column name="description" value="Sommerfest für alle Mitarbeitenden."/>
+            <column name="type" value="FESTIVITY"/>
+        </insert>
+
+        <!-- Users -->
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="max.mustermann@datadrivers.de"/>
+            <column name="first_name" value="Max"/>
+            <column name="last_name" value="Mustermann"/>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="erika.gabler@datadrivers.de"/>
+            <column name="first_name" value="Erika"/>
+            <column name="last_name" value="Gabler"/>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="Paul.Panzer@datadrivers.de"/>
+            <column name="first_name" value="Paul"/>
+            <column name="last_name" value="Panzer"/>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="homer.simpson@datadrivers.de"/>
+            <column name="first_name" value="Homer"/>
+            <column name="last_name" value="Simpson"/>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="willy.wellensittich@datadrivers.de"/>
+            <column name="first_name" value="Willie"/>
+            <column name="last_name" value="Wellensittich"/>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="ursula.spatz@datadrivers.de"/>
+            <column name="first_name" value="Ursula"/>
+            <column name="last_name" value="Spatz"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -7,7 +7,7 @@
        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <!-- create DB schema -->
-    <include file="20250705-schema-definition.sql" relativeToChangelogFile="true" />
+    <include file="20250705-schema-definition.xml" relativeToChangelogFile="true" />
     <!-- add example data -->
-    <include file="20250705-add-example-data.sql"   relativeToChangelogFile="true"/>
+    <include file="20250705-add-example-data.xml"   relativeToChangelogFile="true"/>
 </databaseChangeLog>
