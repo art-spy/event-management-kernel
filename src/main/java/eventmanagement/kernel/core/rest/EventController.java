@@ -1,6 +1,7 @@
 package eventmanagement.kernel.core.rest;
 
 import eventmanagement.kernel.core.domain.error.GenericEventmanagementException;
+import eventmanagement.kernel.core.domain.error.OverlappingEventException;
 import eventmanagement.kernel.core.domain.model.EventBO;
 import eventmanagement.kernel.core.domain.service.EventService;
 import eventmanagement.kernel.core.rest.mapper.BoDtoMapper;
@@ -88,6 +89,10 @@ public class EventController {
     private ResponseEntity<EventDto> generateErrorResponse(GenericEventmanagementException e) {
         EventDto errorDto = new EventDto();
         errorDto.getMessages().put("errorType", e.getErrorType());
+        if (e instanceof OverlappingEventException) {
+            errorDto.getMessages().put("user", ((OverlappingEventException) e).getUser());
+        }
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
     }
 

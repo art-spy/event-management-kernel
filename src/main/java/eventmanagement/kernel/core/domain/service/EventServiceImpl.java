@@ -132,7 +132,8 @@ public class EventServiceImpl implements EventService {
             if (conflict) {
                 throw new OverlappingEventException(
                         "Benutzer " + user.getEmail() + " hat zeitlich überlappendes Event.",
-                        ErrorType.DATE_OVERLAPPING_USER
+                        ErrorType.DATE_OVERLAPPING_USER,
+                        user
                 );
             }
         }
