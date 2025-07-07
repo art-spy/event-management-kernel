@@ -1,9 +1,11 @@
 package eventmanagement.kernel.core.rest;
 
+import eventmanagement.kernel.core.domain.error.GenericEventmanagementException;
 import eventmanagement.kernel.core.domain.service.UserService;
 import eventmanagement.kernel.core.rest.mapper.BoDtoMapper;
 import eventmanagement.kernel.core.rest.model.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,26 +39,49 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(mapper.toDto(userService.findUserById(id)));
+        try {
+            return ResponseEntity.ok(mapper.toDto(userService.findUserById(id)));
+        } catch (GenericEventmanagementException e) {
+            return generateErrorResponse(e);
+        }
     }
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto dto) {
-        return ResponseEntity.ok(
-                mapper.toDto(userService.createUser(mapper.toBo(dto)))
-        );
+        try {
+            return ResponseEntity.ok(
+                    mapper.toDto(userService.createUser(mapper.toBo(dto)))
+            );
+        } catch (GenericEventmanagementException e) {
+            return generateErrorResponse(e);
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto dto) {
-        return ResponseEntity.ok(
-                mapper.toDto(userService.updateUser(id, mapper.toBo(dto)))
-        );
+        try {
+            return ResponseEntity.ok(
+                    mapper.toDto(userService.updateUser(id, mapper.toBo(dto)))
+            );
+        } catch (GenericEventmanagementException e) {
+            return generateErrorResponse(e);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (GenericEventmanagementException e) {
+            return generateErrorResponse(e);
+        }
     }
+
+    private ResponseEntity<UserDto> generateErrorResponse(GenericEventmanagementException e) {
+        UserDto errorDto = new UserDto();
+        errorDto.getMessages().put("errorType", e.getErrorType());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
+
 }

@@ -1,6 +1,5 @@
 package eventmanagement.kernel.core.rest.model;
 
-import eventmanagement.kernel.core.domain.model.EventType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDto {
+public class EventDto extends ResponseDto {
 
     private Long id;
     private String title;

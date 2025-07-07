@@ -1,5 +1,6 @@
 package eventmanagement.kernel.core.domain.model;
 
+import eventmanagement.kernel.core.rest.model.EventType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

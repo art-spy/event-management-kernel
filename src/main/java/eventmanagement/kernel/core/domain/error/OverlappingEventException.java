@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Getter
 @ResponseStatus(HttpStatus.CONFLICT)
-public class OverlappingEventException extends RuntimeException {
-
-    private final ErrorType errorType;
+public class OverlappingEventException extends GenericEventmanagementException {
 
     public OverlappingEventException(String msg, ErrorType errorType) {
-        super(msg);
-        this.errorType = errorType;
+        super(msg, errorType);
     }
 
 }

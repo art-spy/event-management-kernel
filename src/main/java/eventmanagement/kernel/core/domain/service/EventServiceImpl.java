@@ -6,13 +6,13 @@ import eventmanagement.kernel.core.domain.error.OverlappingEventException;
 import eventmanagement.kernel.core.domain.error.UserNotFoundException;
 import eventmanagement.kernel.core.domain.error.ValidationException;
 import eventmanagement.kernel.core.domain.model.EventBO;
-import eventmanagement.kernel.core.domain.model.EventType;
 import eventmanagement.kernel.core.domain.model.UserBO;
 import eventmanagement.kernel.core.persistance.EventEntity;
 import eventmanagement.kernel.core.persistance.UserEntity;
 import eventmanagement.kernel.core.persistance.mapper.EntityBoMapper;
 import eventmanagement.kernel.core.persistance.repository.EventJpaRepository;
 import eventmanagement.kernel.core.persistance.repository.UserJpaRepository;
+import eventmanagement.kernel.core.rest.model.EventType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +67,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventBO updateEvent(Long id, EventBO event) throws EventNotFoundException {
+    public EventBO updateEvent(Long id, EventBO event) {
         if (!eventJpaRepository.existsById(id)) {
             throw new EventNotFoundException("Event nicht gefunden: " + id, ErrorType.EVENT_NOT_FOUND);
         }

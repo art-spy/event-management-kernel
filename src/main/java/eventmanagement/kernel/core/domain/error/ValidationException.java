@@ -6,12 +6,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class ValidationException extends RuntimeException {
-
-    private final ErrorType errorType;
+public class ValidationException extends GenericEventmanagementException {
 
     public ValidationException(String msg, ErrorType errorType) {
-        super(msg);
-        this.errorType = errorType;
+        super(msg, errorType);
     }
+
 }

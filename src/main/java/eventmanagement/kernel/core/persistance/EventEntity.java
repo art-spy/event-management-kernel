@@ -1,6 +1,6 @@
 package eventmanagement.kernel.core.persistance;
 
-import eventmanagement.kernel.core.domain.model.EventType;
+import eventmanagement.kernel.core.rest.model.EventType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,8 +18,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**

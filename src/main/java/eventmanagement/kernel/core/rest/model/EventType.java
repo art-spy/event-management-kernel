@@ -1,4 +1,4 @@
-package eventmanagement.kernel.core.domain.model;
+package eventmanagement.kernel.core.rest.model;
 
 /**
  * Enum for event types.
