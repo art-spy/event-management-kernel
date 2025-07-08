@@ -4,6 +4,7 @@
     <option name="bindingSuggestionsEnabled" value="false" />
     <option name="moduleMapping">
       <map>
+        <entry key="event-management-parent" value="event-management-kernel (1)" />
         <entry key="eventmanagement-kernel" value="event-management-kernel (1)" />
       </map>
     </option>
