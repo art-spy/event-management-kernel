@@ -1,0 +1,21 @@
+networks:
+  event-management-network:
+    driver: bridge
+
+services:
+  event-management-kernel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: event-management-kernel
+    ports:
+      - "8181:8181"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:db2://host.docker.internal:51822/EVENTS:currentSchema=EVENTS;
+      - SPRING_DATASOURCE_USERNAME=db2inst1
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SERVER_PORT=8181
+    networks:
+      - event-management-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

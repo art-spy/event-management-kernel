@@ -1,3 +1,11 @@
+# Event Management Kernel
+
+### Start Docker Images
+
+docker-compose -f docker-compose.db.yml up -d
+docker-compose -f docker-compose.kernel.yml up -d
+
+
 # Getting Started
 
 ### Reference Documentation

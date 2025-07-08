@@ -9,5 +9,5 @@
     <!-- create DB schema -->
     <include file="20250705-schema-definition.xml" relativeToChangelogFile="true" />
     <!-- add example data -->
-    <include file="20250705-add-example-data.xml"   relativeToChangelogFile="true"/>
+    <include file="20250705-add-example-data.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

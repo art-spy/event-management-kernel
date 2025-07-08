@@ -5,144 +5,163 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
-    <changeSet id="20250705-insert-example-data" author="dev">
-        <!-- Events -->
-        <insert tableName="EVENTS" schemaName="EVENTS">
-            <column name="title">Afterwork Treffen</column>
-            <column name="location">Terrasse</column>
-            <column name="start_date">2024-07-10 18:00:00</column>
-            <column name="end_date">2024-07-10 21:00:00</column>
-            <column name="description">Gemütlicher Ausklang.</column>
-            <column name="type">AFTERWORK</column>
-        </insert>
+    <changeSet id="20250705-insert-events" author="artspy">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM EVENTS.EVENTS
+            </sqlCheck>
+        </preConditions>
 
         <insert tableName="EVENTS" schemaName="EVENTS">
-            <column name="title">JavaScript Meetup</column>
-            <column name="location">Großer Konfi</column>
-            <column name="start_date">2024-08-01 17:00:00</column>
-            <column name="end_date">2024-08-01 20:00:00</column>
-            <column name="description">Meetup für JavaScript-Enthusiasten.</column>
-            <column name="type">MEETUP</column>
+            <column name="title" value="Afterwork Treffen"/>
+            <column name="location" value="Terrasse"/>
+            <column name="start_date" value="2024-07-10 18:00:00"/>
+            <column name="end_date" value="2024-07-10 21:00:00"/>
+            <column name="description" value="Gemütlicher Ausklang."/>
+            <column name="type" value="AFTERWORK"/>
         </insert>
 
         <insert tableName="EVENTS" schemaName="EVENTS">
-            <column name="title">Java Konferenz</column>
-            <column name="location">Messehallen Hamburg</column>
-            <column name="start_date">2024-09-15 09:00:00</column>
-            <column name="end_date">2024-09-17 18:00:00</column>
-            <column name="description">Dreitägige Konferenz mit internationalen Rednern.</column>
-            <column name="type">CONFERENCE</column>
+            <column name="title" value="JavaScript Meetup"/>
+            <column name="location" value="Großer Konfi"/>
+            <column name="start_date" value="2024-08-01 17:00:00"/>
+            <column name="end_date" value="2024-08-01 20:00:00"/>
+            <column name="description" value="Meetup für JavaScript-Enthusiasten."/>
+            <column name="type" value="MEETUP"/>
         </insert>
 
         <insert tableName="EVENTS" schemaName="EVENTS">
-            <column name="title">Sommerfest</column>
-            <column name="location">Garten C</column>
-            <column name="start_date">2024-07-20 12:00:00</column>
-            <column name="end_date">2024-07-21 22:00:00</column>
-            <column name="description">Sommerfest für alle Mitarbeitenden.</column>
-            <column name="type">FESTIVITY</column>
+            <column name="title" value="Java Konferenz"/>
+            <column name="location" value="Messehallen Hamburg"/>
+            <column name="start_date" value="2024-09-15 09:00:00"/>
+            <column name="end_date" value="2024-09-17 18:00:00"/>
+            <column name="description" value="Dreitägige Konferenz mit internationalen Rednern."/>
+            <column name="type" value="CONFERENCE"/>
         </insert>
 
-        <!-- Users -->
-        <insert tableName="USERS" schemaName="EVENTS">
-            <column name="email">max.mustermann@datadrivers.de</column>
-            <column name="first_name">Max</column>
-            <column name="last_name">Mustermann</column>
+        <insert tableName="EVENTS" schemaName="EVENTS">
+            <column name="title" value="Sommerfest"/>
+            <column name="location" value="Garten C"/>
+            <column name="start_date" value="2024-07-20 12:00:00"/>
+            <column name="end_date" value="2024-07-21 22:00:00"/>
+            <column name="description" value="Sommerfest für alle Mitarbeitenden."/>
+            <column name="type" value="FESTIVITY"/>
         </insert>
+    </changeSet>
+
+    <changeSet id="20250705-insert-users" author="artspy">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM EVENTS.USERS
+            </sqlCheck>
+        </preConditions>
 
         <insert tableName="USERS" schemaName="EVENTS">
-            <column name="email">erika.gabler@datadrivers.de</column>
-            <column name="first_name">Erika</column>
-            <column name="last_name">Gabler</column>
-        </insert>
-
-        <insert tableName="USERS" schemaName="EVENTS">
-            <column name="email">Paul.Panzer@datadrivers.de</column>
-            <column name="first_name">Paul</column>
-            <column name="last_name">Panzer</column>
-        </insert>
-
-        <insert tableName="USERS" schemaName="EVENTS">
-            <column name="email">homer.simpson@datadrivers.de</column>
-            <column name="first_name">Homer</column>
-            <column name="last_name">Simpson</column>
+            <column name="email" value="max.mustermann@datadrivers.de"/>
+            <column name="first_name" value="Max"/>
+            <column name="last_name" value="Mustermann"/>
         </insert>
 
         <insert tableName="USERS" schemaName="EVENTS">
-            <column name="email">willy.wellensittich@datadrivers.de</column>
-            <column name="first_name">Willie</column>
-            <column name="last_name">Wellensittich</column>
+            <column name="email" value="erika.gabler@datadrivers.de"/>
+            <column name="first_name" value="Erika"/>
+            <column name="last_name" value="Gabler"/>
         </insert>
 
         <insert tableName="USERS" schemaName="EVENTS">
-            <column name="email">ursula.spatz@datadrivers.de</column>
-            <column name="first_name">Ursula</column>
-            <column name="last_name">Spatz</column>
+            <column name="email" value="Paul.Panzer@datadrivers.de"/>
+            <column name="first_name" value="Paul"/>
+            <column name="last_name" value="Panzer"/>
         </insert>
 
-        <!-- Event Participants -->
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="homer.simpson@datadrivers.de"/>
+            <column name="first_name" value="Homer"/>
+            <column name="last_name" value="Simpson"/>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="willy.wellensittich@datadrivers.de"/>
+            <column name="first_name" value="Willie"/>
+            <column name="last_name" value="Wellensittich"/>
+        </insert>
+
+        <insert tableName="USERS" schemaName="EVENTS">
+            <column name="email" value="ursula.spatz@datadrivers.de"/>
+            <column name="first_name" value="Ursula"/>
+            <column name="last_name" value="Spatz"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20250705-insert-event-participants" author="artspy">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM EVENTS.EVENT_PARTICIPANTS
+            </sqlCheck>
+        </preConditions>
+
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">1</column>
-            <column name="user_id">1</column>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="1"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">1</column>
-            <column name="user_id">2</column>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="2"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">1</column>
-            <column name="user_id">3</column>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="3"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">1</column>
-            <column name="user_id">4</column>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="4"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">1</column>
-            <column name="user_id">5</column>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="5"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">1</column>
-            <column name="user_id">6</column>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="6"/>
         </insert>
 
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">2</column>
-            <column name="user_id">4</column>
+            <column name="event_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="4"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">2</column>
-            <column name="user_id">5</column>
+            <column name="event_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="5"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">2</column>
-            <column name="user_id">6</column>
-        </insert>
-
-        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">3</column>
-            <column name="user_id">1</column>
-        </insert>
-        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">3</column>
-            <column name="user_id">3</column>
-        </insert>
-        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">3</column>
-            <column name="user_id">5</column>
+            <column name="event_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="6"/>
         </insert>
 
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">4</column>
-            <column name="user_id">2</column>
+            <column name="event_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="1"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">4</column>
-            <column name="user_id">4</column>
+            <column name="event_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="3"/>
         </insert>
         <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
-            <column name="event_id">4</column>
-            <column name="user_id">6</column>
+            <column name="event_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="5"/>
+        </insert>
+
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="4"/>
+        </insert>
+        <insert tableName="EVENT_PARTICIPANTS" schemaName="EVENTS">
+            <column name="event_id" valueNumeric="4"/>
+            <column name="user_id" valueNumeric="6"/>
         </insert>
     </changeSet>
 
