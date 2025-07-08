@@ -17,10 +17,14 @@
         <module name="event-management-kernel" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="eventmanagement-kernel" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="event-management-kernel" options="-parameters -Amapstruct.defaultComponentModel=spring" />
+      <module name="eventmanagement-kernel" options="-Amapstruct.defaultComponentModel=spring" />
     </option>
   </component>
 </project>

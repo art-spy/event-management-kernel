@@ -2,5 +2,10 @@
 <project version="4">
   <component name="SonarLintProjectSettings">
     <option name="bindingSuggestionsEnabled" value="false" />
+    <option name="moduleMapping">
+      <map>
+        <entry key="eventmanagement-kernel" value="event-management-kernel (1)" />
+      </map>
+    </option>
   </component>
 </project>

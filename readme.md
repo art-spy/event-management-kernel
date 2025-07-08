@@ -1,14 +1,22 @@
 # Event Management Kernel
 
 ### Start Docker Images
-
+Compose DB Docker container: </br>
 docker-compose -f docker-compose.db.yml up -d
+
+Compose Kernel Docker container:</br>
 docker-compose -f docker-compose.kernel.yml up -d
 
+### Database URL:
+http://localhost:8181/api/events
 
-# Getting Started
+### Kernel API URLs:
+http://localhost:8181/api/events </br>
+http://localhost:8181/api/users
 
-### Reference Documentation
+# Further Documentation
+
+### Reference
 
 For further reference, please consider the following sections:
 
