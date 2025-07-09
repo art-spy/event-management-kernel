@@ -8,7 +8,7 @@ Compose Kernel Docker container:</br>
 docker-compose -f docker-compose.kernel.yml up -d
 
 ### Database URL:
-http://localhost:8181/api/events
+jdbc:db2://localhost:51822/EVENTS:currentSchema=EVENTS
 
 ### Kernel API URLs:
 http://localhost:8181/api/events </br>

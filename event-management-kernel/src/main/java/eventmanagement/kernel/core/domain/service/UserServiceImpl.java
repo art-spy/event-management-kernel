@@ -11,6 +11,7 @@ import eventmanagement.kernel.core.persistance.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
     public List<UserBO> findAllUsers() {
         return userJpaRepository.findAll().stream()
                 .map(mapper::toBO)
+                .sorted(Comparator.comparing(UserBO::getFirstName))
                 .collect(Collectors.toList());
     }
 

@@ -8,7 +8,6 @@ import eventmanagement.kernel.core.domain.error.UserNotFoundException;
 import eventmanagement.kernel.core.domain.error.ValidationException;
 import eventmanagement.kernel.core.domain.model.EventBO;
 import eventmanagement.kernel.core.domain.model.UserBO;
-import eventmanagement.kernel.core.persistance.EventEntity;
 import eventmanagement.kernel.core.persistance.UserEntity;
 import eventmanagement.kernel.core.persistance.mapper.EntityBoMapper;
 import eventmanagement.kernel.core.persistance.repository.EventJpaRepository;
@@ -18,12 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +33,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventBO> findAllEvents() {
-        List<EventEntity> eventEntities = eventJpaRepository.findAll();
-        List<EventBO> eventBOList = new ArrayList<>();
-
-        for (EventEntity eventEntity : eventEntities) {
-            EventBO eventBO = entityBoMapper.toBO(eventEntity);
-            eventBOList.add(eventBO);
-        }
-
-        Collections.sort(eventBOList, Comparator.comparing(EventBO::getStartDate));
-
-        return eventBOList;
+        return eventJpaRepository.findAll().stream()
+                .map(entityBoMapper::toBO)
+                .sorted(Comparator.comparing(EventBO::getStartDate).reversed())
+                .collect(Collectors.toList());
     }
 
     @Override
